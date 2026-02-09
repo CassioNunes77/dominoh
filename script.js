@@ -218,19 +218,43 @@ function setupEventListeners() {
     });
 }
 
+function startGameWithPlayers(playersList) {
+    // Definir jogadores globalmente
+    players = playersList;
+    
+    // Inicializar pontuações
+    scores = {};
+    players.forEach(player => {
+        scores[player] = 0;
+    });
+    
+    currentPlayerIndex = 0;
+    round = 1;
+    
+    // Salvar no localStorage
+    saveToStorage();
+    
+    // Renderizar o jogo
+    renderGame();
+}
+
 function startGame() {
-    // Coletar nomes dos jogadores (se ainda não foram coletados)
-    if (players.length === 0) {
-        players = [];
-        for (let i = 1; i <= 4; i++) {
-            const input = document.getElementById(`player${i}`);
-            if (input) {
-                const name = input.value.trim();
-                if (name) {
-                    players.push(name);
-                }
+    // Coletar nomes dos jogadores
+    players = [];
+    for (let i = 1; i <= 4; i++) {
+        const input = document.getElementById(`player${i}`);
+        if (input) {
+            const name = input.value.trim();
+            if (name) {
+                players.push(name);
             }
         }
+    }
+    
+    // Validar pelo menos 2 jogadores
+    if (players.length < 2) {
+        customAlert('Por favor, adicione pelo menos 2 jogadores!');
+        return;
     }
     
     // Inicializar pontuações
