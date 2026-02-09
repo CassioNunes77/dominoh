@@ -132,7 +132,6 @@ function renderGame() {
         card.innerHTML = `
             <div class="player-name">${player}</div>
             <div class="player-score" id="score-${player}">${scores[player]}</div>
-            <div class="score-label">Pontos</div>
         `;
         
         playersGrid.appendChild(card);

@@ -385,7 +385,7 @@ body::before {
     background: rgba(26, 26, 26, 0.6);
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    padding: 20px;
+    padding: 14px 16px;
     text-align: center;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
@@ -436,21 +436,21 @@ body::before {
 }
 
 .player-name {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--text-light);
-    margin-bottom: 14px;
+    margin-bottom: 8px;
     word-break: break-word;
 }
 
 .player-score {
-    font-size: 48px;
+    font-size: 42px;
     font-weight: 900;
     background: linear-gradient(135deg, #B77FE8 0%, #9D4EDD 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 10px;
+    margin-bottom: 0;
     transition: all 0.3s ease;
     letter-spacing: -1px;
 }
@@ -485,11 +485,7 @@ body::before {
 }
 
 .score-label {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.6);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    font-weight: 600;
+    display: none;
 }
 
 /* Score Input Section */
@@ -686,15 +682,15 @@ body::before {
     }
     
     .player-card {
-        padding: 18px;
+        padding: 12px 14px;
     }
     
     .player-name {
-        font-size: 18px;
+        font-size: 16px;
     }
     
     .player-score {
-        font-size: 40px;
+        font-size: 36px;
     }
     
     .score-buttons {
