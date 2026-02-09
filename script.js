@@ -218,7 +218,8 @@ function setupEventListeners() {
     });
 }
 
-function startGameWithPlayers(playersList) {
+// Tornar função globalmente acessível
+window.startGameWithPlayers = function(playersList) {
     // Definir jogadores globalmente
     players = playersList;
     
@@ -245,7 +246,7 @@ function startGameWithPlayers(playersList) {
     setTimeout(() => {
         renderGame();
     }, 100);
-}
+};
 
 function startGame() {
     // Coletar nomes dos jogadores
@@ -477,7 +478,7 @@ async function resetGame() {
     }
 }
 
-async async function goBack() {
+async function goBack() {
     const confirmed = await customConfirm('Voltar para a tela inicial? O progresso será salvo.');
     if (confirmed) {
         switchScreen('mode');
