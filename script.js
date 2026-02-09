@@ -5,8 +5,12 @@ let scores = {};
 let round = 1;
 
 // Elementos DOM
+const modeScreen = document.getElementById('mode-screen');
 const setupScreen = document.getElementById('setup-screen');
 const gameScreen = document.getElementById('game-screen');
+const modeIndividualBtn = document.getElementById('mode-individual');
+const modeDuplasBtn = document.getElementById('mode-duplas');
+const backToModeBtn = document.getElementById('back-to-mode');
 const startGameBtn = document.getElementById('start-game');
 const backBtn = document.getElementById('back-btn');
 const resetBtn = document.getElementById('reset-btn');
@@ -131,6 +135,11 @@ function preventDoubleTapZoom() {
 }
 
 function setupEventListeners() {
+    modeIndividualBtn.addEventListener('click', () => switchScreen('setup'));
+    modeDuplasBtn.addEventListener('click', () => {
+        // Desabilitado por enquanto
+    });
+    backToModeBtn.addEventListener('click', () => switchScreen('mode'));
     startGameBtn.addEventListener('click', startGame);
     backBtn.addEventListener('click', goBack);
     resetBtn.addEventListener('click', resetGame);
@@ -206,11 +215,17 @@ async function startGame() {
 }
 
 function switchScreen(screen) {
-    if (screen === 'setup') {
+    // Remover active de todas as telas
+    modeScreen.classList.remove('active');
+    setupScreen.classList.remove('active');
+    gameScreen.classList.remove('active');
+    
+    // Adicionar active na tela selecionada
+    if (screen === 'mode') {
+        modeScreen.classList.add('active');
+    } else if (screen === 'setup') {
         setupScreen.classList.add('active');
-        gameScreen.classList.remove('active');
-    } else {
-        setupScreen.classList.remove('active');
+    } else if (screen === 'game') {
         gameScreen.classList.add('active');
     }
 }
@@ -301,18 +316,9 @@ function addPoints(points) {
     // Salvar estado
     saveToStorage();
     
-    // Verificar se é o último jogador
-    const isLastPlayer = currentPlayerIndex === players.length - 1;
-    
-    // Avançar para próximo jogador ou próxima rodada
+    // Avançar para próximo jogador automaticamente
     setTimeout(() => {
-        if (isLastPlayer) {
-            // Se for o último jogador, avançar para próxima rodada
-            nextRound();
-        } else {
-            // Caso contrário, avançar para próximo jogador
-            nextPlayer();
-        }
+        nextPlayer();
     }, 300);
 }
 
@@ -380,10 +386,10 @@ async function resetGame() {
     }
 }
 
-async function goBack() {
+async async function goBack() {
     const confirmed = await customConfirm('Voltar para a tela inicial? O progresso será salvo.');
     if (confirmed) {
-        switchScreen('setup');
+        switchScreen('mode');
         saveToStorage();
     }
 }

@@ -14,10 +14,32 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Tela Inicial - Configuração de Jogadores -->
-        <div id="setup-screen" class="screen active">
+        <!-- Tela Inicial - Seleção de Modo -->
+        <div id="mode-screen" class="screen active">
             <div class="header">
                 <h1 class="title animate-bounce-in">🎲 Dominó</h1>
+                <p class="subtitle">Escolha o modo de jogo</p>
+            </div>
+            
+            <div class="mode-selection">
+                <button id="mode-individual" class="mode-btn">
+                    <span class="mode-icon">👤</span>
+                    <span class="mode-title">Individual</span>
+                    <span class="mode-description">Cada jogador joga por si</span>
+                </button>
+                
+                <button id="mode-duplas" class="mode-btn" disabled>
+                    <span class="mode-icon">👥</span>
+                    <span class="mode-title">Duplas</span>
+                    <span class="mode-description">Em breve</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Configuração de Jogadores -->
+        <div id="setup-screen" class="screen">
+            <div class="header">
+                <h1 class="title">🎲 Dominó</h1>
                 <p class="subtitle">Configure os jogadores</p>
             </div>
             
@@ -36,9 +58,12 @@
                 </div>
             </div>
             
-            <button id="start-game" class="btn-primary animate-scale-in">
-                Começar Jogo
-            </button>
+            <div class="setup-actions">
+                <button id="back-to-mode" class="btn-secondary">Voltar</button>
+                <button id="start-game" class="btn-primary">
+                    Começar Jogo
+                </button>
+            </div>
         </div>
 
         <!-- Tela Principal - Contagem de Pontos -->
