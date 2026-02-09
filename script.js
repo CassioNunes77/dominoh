@@ -224,13 +224,16 @@ async function startGame() {
         setupScreen = document.getElementById('setup-screen');
         gameScreen = document.getElementById('game-screen');
     }
+    
     // Coletar nomes dos jogadores
     players = [];
     for (let i = 1; i <= 4; i++) {
         const input = document.getElementById(`player${i}`);
-        const name = input.value.trim();
-        if (name) {
-            players.push(name);
+        if (input) {
+            const name = input.value.trim();
+            if (name) {
+                players.push(name);
+            }
         }
     }
     
@@ -252,8 +255,10 @@ async function startGame() {
     // Salvar no localStorage
     saveToStorage();
     
-    // Trocar tela
-    switchScreen('game');
+    // Trocar tela diretamente
+    document.getElementById('setup-screen').classList.remove('active');
+    document.getElementById('game-screen').classList.add('active');
+    
     renderGame();
 }
 
