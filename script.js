@@ -20,6 +20,78 @@ const nextRoundBtn = document.getElementById('next-round');
 // Cores para os jogadores - paleta roxo escuro
 const playerColors = ['green', 'blue', 'teal', 'green'];
 
+// Sistema de Modal Customizado
+function showModal(title, message, type = 'alert') {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('custom-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalFooter = document.getElementById('modal-footer');
+        
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        modalFooter.innerHTML = '';
+        
+        if (type === 'alert') {
+            const okBtn = document.createElement('button');
+            okBtn.className = 'modal-btn modal-btn-primary';
+            okBtn.textContent = 'OK';
+            okBtn.onclick = () => {
+                hideModal();
+                resolve(true);
+            };
+            modalFooter.appendChild(okBtn);
+        } else if (type === 'confirm') {
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'modal-btn modal-btn-secondary';
+            cancelBtn.textContent = 'Cancelar';
+            cancelBtn.onclick = () => {
+                hideModal();
+                resolve(false);
+            };
+            
+            const confirmBtn = document.createElement('button');
+            confirmBtn.className = 'modal-btn modal-btn-primary';
+            confirmBtn.textContent = 'Confirmar';
+            confirmBtn.onclick = () => {
+                hideModal();
+                resolve(true);
+            };
+            
+            modalFooter.appendChild(cancelBtn);
+            modalFooter.appendChild(confirmBtn);
+        }
+        
+        modal.classList.add('show');
+        
+        // Fechar ao clicar no overlay
+        const overlay = modal.querySelector('.modal-overlay');
+        overlay.onclick = () => {
+            if (type === 'alert') {
+                hideModal();
+                resolve(true);
+            } else {
+                hideModal();
+                resolve(false);
+            }
+        };
+    });
+}
+
+function hideModal() {
+    const modal = document.getElementById('custom-modal');
+    modal.classList.remove('show');
+}
+
+// Funções auxiliares para compatibilidade
+async function customAlert(message) {
+    await showModal('Atenção', message, 'alert');
+}
+
+async function customConfirm(message) {
+    return await showModal('Confirmação', message, 'confirm');
+}
+
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
@@ -67,7 +139,7 @@ function setupEventListeners() {
     });
 }
 
-function startGame() {
+async function startGame() {
     // Coletar nomes dos jogadores
     players = [];
     for (let i = 1; i <= 4; i++) {
@@ -80,7 +152,7 @@ function startGame() {
     
     // Validar pelo menos 2 jogadores
     if (players.length < 2) {
-        alert('Por favor, adicione pelo menos 2 jogadores!');
+        await customAlert('Por favor, adicione pelo menos 2 jogadores!');
         return;
     }
     
@@ -248,8 +320,9 @@ function checkWinner() {
     });
 }
 
-function resetGame() {
-    if (confirm('Tem certeza que deseja reiniciar o jogo? Todas as pontuações serão zeradas.')) {
+async function resetGame() {
+    const confirmed = await customConfirm('Tem certeza que deseja reiniciar o jogo? Todas as pontuações serão zeradas.');
+    if (confirmed) {
         players.forEach(player => {
             scores[player] = 0;
         });
@@ -262,8 +335,9 @@ function resetGame() {
     }
 }
 
-function goBack() {
-    if (confirm('Voltar para a tela inicial? O progresso será salvo.')) {
+async function goBack() {
+    const confirmed = await customConfirm('Voltar para a tela inicial? O progresso será salvo.');
+    if (confirmed) {
         switchScreen('setup');
         saveToStorage();
     }
@@ -301,8 +375,9 @@ function loadFromStorage() {
                 
                 // Se houver jogo em andamento, perguntar se quer continuar
                 if (Object.keys(scores).length > 0) {
-                    setTimeout(() => {
-                        if (confirm('Encontramos um jogo em andamento. Deseja continuar?')) {
+                    setTimeout(async () => {
+                        const confirmed = await customConfirm('Encontramos um jogo em andamento. Deseja continuar?');
+                        if (confirmed) {
                             switchScreen('game');
                             renderGame();
                         }
