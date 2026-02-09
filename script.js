@@ -222,6 +222,8 @@ function startGameWithPlayers(playersList) {
     // Definir jogadores globalmente
     players = playersList;
     
+    console.log('Jogadores recebidos:', players);
+    
     // Inicializar pontuações
     scores = {};
     players.forEach(player => {
@@ -231,11 +233,18 @@ function startGameWithPlayers(playersList) {
     currentPlayerIndex = 0;
     round = 1;
     
+    // Garantir que playersGrid existe
+    if (!playersGrid) {
+        playersGrid = document.getElementById('players-grid');
+    }
+    
     // Salvar no localStorage
     saveToStorage();
     
-    // Renderizar o jogo
-    renderGame();
+    // Pequeno delay para garantir que a tela foi trocada
+    setTimeout(() => {
+        renderGame();
+    }, 100);
 }
 
 function startGame() {
@@ -294,8 +303,27 @@ function switchScreen(screen) {
 }
 
 function renderGame() {
+    // Garantir que playersGrid existe
+    if (!playersGrid) {
+        playersGrid = document.getElementById('players-grid');
+    }
+    
+    if (!playersGrid) {
+        console.error('players-grid não encontrado');
+        return;
+    }
+    
+    // Verificar se há jogadores
+    if (!players || players.length === 0) {
+        console.error('Nenhum jogador encontrado');
+        return;
+    }
+    
     // Atualizar título da rodada
-    document.querySelector('.game-title').textContent = `🎲 Rodada ${round}`;
+    const gameTitle = document.querySelector('.game-title');
+    if (gameTitle) {
+        gameTitle.textContent = `🎲 Rodada ${round}`;
+    }
     
     // Limpar grid
     playersGrid.innerHTML = '';
