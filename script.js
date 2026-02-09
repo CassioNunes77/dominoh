@@ -17,8 +17,8 @@ const customPointsInput = document.getElementById('custom-points');
 const addCustomBtn = document.getElementById('add-custom');
 const nextRoundBtn = document.getElementById('next-round');
 
-// Cores para os jogadores
-const playerColors = ['green', 'blue', 'purple', 'orange', 'red'];
+// Cores para os jogadores - paleta coerente verde/azul/teal
+const playerColors = ['green', 'blue', 'teal', 'green'];
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
@@ -112,6 +112,9 @@ function switchScreen(screen) {
 }
 
 function renderGame() {
+    // Atualizar título da rodada
+    document.querySelector('.game-title').textContent = `Rodada ${round}`;
+    
     // Limpar grid
     playersGrid.innerHTML = '';
     
@@ -195,9 +198,6 @@ function addPoints(points) {
         }, 200);
     }
     
-    // Criar efeito de confete
-    createConfetti();
-    
     // Salvar estado
     saveToStorage();
     
@@ -267,29 +267,6 @@ function goBack() {
     if (confirm('Voltar para a tela inicial? O progresso será salvo.')) {
         switchScreen('setup');
         saveToStorage();
-    }
-}
-
-function createConfetti() {
-    const colors = ['#58CC02', '#1CB0F6', '#CE82FF', '#FF9600', '#FF4B4B'];
-    const count = 20;
-    
-    for (let i = 0; i < count; i++) {
-        setTimeout(() => {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = Math.random() * 0.5 + 's';
-            confetti.style.width = (Math.random() * 8 + 4) + 'px';
-            confetti.style.height = (Math.random() * 8 + 4) + 'px';
-            
-            document.body.appendChild(confetti);
-            
-            setTimeout(() => {
-                confetti.remove();
-            }, 3000);
-        }, i * 30);
     }
 }
 
