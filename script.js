@@ -135,11 +135,23 @@ function preventDoubleTapZoom() {
 }
 
 function setupEventListeners() {
-    modeIndividualBtn.addEventListener('click', () => switchScreen('setup'));
-    modeDuplasBtn.addEventListener('click', () => {
-        // Desabilitado por enquanto
-    });
-    backToModeBtn.addEventListener('click', () => switchScreen('mode'));
+    if (modeIndividualBtn) {
+        modeIndividualBtn.addEventListener('click', () => {
+            switchScreen('setup');
+        });
+    }
+    
+    if (modeDuplasBtn) {
+        modeDuplasBtn.addEventListener('click', () => {
+            // Desabilitado por enquanto
+        });
+    }
+    
+    if (backToModeBtn) {
+        backToModeBtn.addEventListener('click', () => {
+            switchScreen('mode');
+        });
+    }
     startGameBtn.addEventListener('click', startGame);
     backBtn.addEventListener('click', goBack);
     resetBtn.addEventListener('click', resetGame);
