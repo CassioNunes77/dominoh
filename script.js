@@ -113,7 +113,7 @@ function switchScreen(screen) {
 
 function renderGame() {
     // Atualizar título da rodada
-    document.querySelector('.game-title').textContent = `Rodada ${round}`;
+    document.querySelector('.game-title').textContent = `🎲 Rodada ${round}`;
     
     // Limpar grid
     playersGrid.innerHTML = '';
@@ -213,7 +213,7 @@ function nextPlayer() {
 
 function nextRound() {
     round++;
-    document.querySelector('.game-title').textContent = `Rodada ${round}`;
+    document.querySelector('.game-title').textContent = `🎲 Rodada ${round}`;
     
     // Animação de transição
     playersGrid.style.animation = 'none';
@@ -256,7 +256,7 @@ function resetGame() {
         round = 1;
         currentPlayerIndex = 0;
         
-        document.querySelector('.game-title').textContent = 'Rodada 1';
+        document.querySelector('.game-title').textContent = '🎲 Rodada 1';
         renderGame();
         saveToStorage();
     }
