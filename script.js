@@ -219,6 +219,11 @@ function setupEventListeners() {
 }
 
 async function startGame() {
+    // Garantir que os elementos existem
+    if (!setupScreen || !gameScreen) {
+        setupScreen = document.getElementById('setup-screen');
+        gameScreen = document.getElementById('game-screen');
+    }
     // Coletar nomes dos jogadores
     players = [];
     for (let i = 1; i <= 4; i++) {

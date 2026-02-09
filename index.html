@@ -59,8 +59,8 @@
             </div>
             
             <div class="setup-actions">
-                <button id="back-to-mode" class="btn-secondary">Voltar</button>
-                <button id="start-game" class="btn-primary">
+                <button id="back-to-mode" class="btn-secondary" onclick="document.getElementById('setup-screen').classList.remove('active'); document.getElementById('mode-screen').classList.add('active');">Voltar</button>
+                <button id="start-game" class="btn-primary" onclick="startGame()">
                     Começar Jogo
                 </button>
             </div>
