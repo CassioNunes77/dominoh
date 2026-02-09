@@ -165,34 +165,18 @@ function preventDoubleTapZoom() {
 }
 
 function setupEventListeners() {
-    // Botão Individual - usar event delegation no container
-    if (modeScreen) {
-        modeScreen.addEventListener('click', function(e) {
-            // Verificar se clicou no botão ou em qualquer elemento dentro dele
-            const btn = e.target.closest('#mode-individual');
-            if (btn) {
-                e.preventDefault();
-                e.stopPropagation();
-                modeScreen.classList.remove('active');
-                setupScreen.classList.add('active');
-                return;
-            }
-        });
-    }
-    
-    // Botão Duplas
-    if (modeDuplasBtn) {
-        modeDuplasBtn.addEventListener('click', () => {
-            // Desabilitado por enquanto
-        });
-    }
+    // Botão Individual - SIMPLES E DIRETO
+    document.getElementById('mode-individual').onclick = function() {
+        document.getElementById('mode-screen').classList.remove('active');
+        document.getElementById('setup-screen').classList.add('active');
+    };
     
     // Botão Voltar
     if (backToModeBtn) {
-        backToModeBtn.addEventListener('click', () => {
-            setupScreen.classList.remove('active');
-            modeScreen.classList.add('active');
-        });
+        backToModeBtn.onclick = function() {
+            document.getElementById('setup-screen').classList.remove('active');
+            document.getElementById('mode-screen').classList.add('active');
+        };
     }
     startGameBtn.addEventListener('click', startGame);
     backBtn.addEventListener('click', goBack);
