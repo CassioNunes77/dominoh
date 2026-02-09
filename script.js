@@ -96,7 +96,39 @@ async function customConfirm(message) {
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     loadFromStorage();
+    preventDoubleTapZoom();
 });
+
+// Prevenir zoom por double-tap em dispositivos móveis
+function preventDoubleTapZoom() {
+    let lastTouchEnd = 0;
+    
+    document.addEventListener('touchend', (event) => {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, { passive: false });
+    
+    // Prevenir double-click zoom
+    document.addEventListener('dblclick', (event) => {
+        event.preventDefault();
+    });
+    
+    // Prevenir gestos de pinch zoom
+    document.addEventListener('gesturestart', (event) => {
+        event.preventDefault();
+    });
+    
+    document.addEventListener('gesturechange', (event) => {
+        event.preventDefault();
+    });
+    
+    document.addEventListener('gestureend', (event) => {
+        event.preventDefault();
+    });
+}
 
 function setupEventListeners() {
     startGameBtn.addEventListener('click', startGame);
