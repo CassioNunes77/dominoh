@@ -707,13 +707,13 @@ body::before {
     }
     
     .score-buttons {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 6px;
     }
     
     .score-btn {
-        font-size: 26px;
-        min-height: 45px;
+        font-size: 18px;
+        min-height: 40px;
     }
     
     .game-title {
