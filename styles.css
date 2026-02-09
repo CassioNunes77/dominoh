@@ -712,8 +712,8 @@ body::before {
     }
     
     .score-btn {
-        font-size: 20px;
-        min-height: 50px;
+        font-size: 26px;
+        min-height: 45px;
     }
     
     .game-title {
