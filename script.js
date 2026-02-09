@@ -17,7 +17,7 @@ const customPointsInput = document.getElementById('custom-points');
 const addCustomBtn = document.getElementById('add-custom');
 const nextRoundBtn = document.getElementById('next-round');
 
-// Cores para os jogadores - paleta coerente verde/azul/teal
+// Cores para os jogadores - paleta roxo escuro
 const playerColors = ['green', 'blue', 'teal', 'green'];
 
 // Inicialização
