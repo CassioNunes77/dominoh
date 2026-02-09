@@ -192,7 +192,7 @@ body::before {
         transform: scale(1);
     }
     50% {
-        transform: scale(1.05);
+        transform: scale(1.08);
     }
 }
 
@@ -433,7 +433,6 @@ body::before {
 .player-card.active {
     border-color: var(--accent-purple);
     background: linear-gradient(135deg, rgba(107, 44, 145, 0.3) 0%, rgba(157, 78, 221, 0.2) 100%);
-    transform: scale(1.05);
     box-shadow: var(--shadow-xl);
     animation: pulse 2s ease-in-out infinite;
 }

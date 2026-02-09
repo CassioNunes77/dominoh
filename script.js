@@ -292,13 +292,10 @@ function addPoints(points) {
         }, 500);
     }
     
-    // Animação de feedback
+    // Animação de feedback apenas se for o jogador ativo
     const card = document.querySelector(`.player-card[data-player="${currentPlayer}"]`);
-    if (card) {
-        card.style.transform = 'scale(1.1)';
-        setTimeout(() => {
-            card.style.transform = '';
-        }, 200);
+    if (card && card.classList.contains('active')) {
+        // A animação pulse já está ativa, não precisa de animação adicional
     }
     
     // Salvar estado
