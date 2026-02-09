@@ -60,7 +60,24 @@
             
             <div class="setup-actions">
                 <button id="back-to-mode" class="btn-secondary" onclick="document.getElementById('setup-screen').classList.remove('active'); document.getElementById('mode-screen').classList.add('active');">Voltar</button>
-                <button id="start-game" class="btn-primary" onclick="startGame()">
+                <button id="start-game" class="btn-primary" onclick="
+                    var players = [];
+                    for (var i = 1; i <= 4; i++) {
+                        var input = document.getElementById('player' + i);
+                        if (input && input.value.trim()) {
+                            players.push(input.value.trim());
+                        }
+                    }
+                    if (players.length < 2) {
+                        alert('Por favor, adicione pelo menos 2 jogadores!');
+                        return;
+                    }
+                    document.getElementById('setup-screen').classList.remove('active');
+                    document.getElementById('game-screen').classList.add('active');
+                    if (typeof startGame === 'function') {
+                        startGame();
+                    }
+                ">
                     Começar Jogo
                 </button>
             </div>

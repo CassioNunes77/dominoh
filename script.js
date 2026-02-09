@@ -218,29 +218,19 @@ function setupEventListeners() {
     });
 }
 
-async function startGame() {
-    // Garantir que os elementos existem
-    if (!setupScreen || !gameScreen) {
-        setupScreen = document.getElementById('setup-screen');
-        gameScreen = document.getElementById('game-screen');
-    }
-    
-    // Coletar nomes dos jogadores
-    players = [];
-    for (let i = 1; i <= 4; i++) {
-        const input = document.getElementById(`player${i}`);
-        if (input) {
-            const name = input.value.trim();
-            if (name) {
-                players.push(name);
+function startGame() {
+    // Coletar nomes dos jogadores (se ainda não foram coletados)
+    if (players.length === 0) {
+        players = [];
+        for (let i = 1; i <= 4; i++) {
+            const input = document.getElementById(`player${i}`);
+            if (input) {
+                const name = input.value.trim();
+                if (name) {
+                    players.push(name);
+                }
             }
         }
-    }
-    
-    // Validar pelo menos 2 jogadores
-    if (players.length < 2) {
-        await customAlert('Por favor, adicione pelo menos 2 jogadores!');
-        return;
     }
     
     // Inicializar pontuações
@@ -255,10 +245,7 @@ async function startGame() {
     // Salvar no localStorage
     saveToStorage();
     
-    // Trocar tela diretamente
-    document.getElementById('setup-screen').classList.remove('active');
-    document.getElementById('game-screen').classList.add('active');
-    
+    // Renderizar o jogo
     renderGame();
 }
 
