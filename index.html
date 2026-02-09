@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#58CC02">
+    <title>Contador de Pontos - Dominó</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Tela Inicial - Configuração de Jogadores -->
+        <div id="setup-screen" class="screen active">
+            <div class="header">
+                <h1 class="title animate-bounce-in">🎲 Dominó</h1>
+                <p class="subtitle">Configure os jogadores</p>
+            </div>
+            
+            <div class="players-setup">
+                <div class="player-input-container">
+                    <input type="text" id="player1" class="player-input" placeholder="Jogador 1" maxlength="15">
+                </div>
+                <div class="player-input-container">
+                    <input type="text" id="player2" class="player-input" placeholder="Jogador 2" maxlength="15">
+                </div>
+                <div class="player-input-container">
+                    <input type="text" id="player3" class="player-input" placeholder="Jogador 3 (opcional)" maxlength="15">
+                </div>
+                <div class="player-input-container">
+                    <input type="text" id="player4" class="player-input" placeholder="Jogador 4 (opcional)" maxlength="15">
+                </div>
+            </div>
+            
+            <button id="start-game" class="btn-primary animate-scale-in">
+                Começar Jogo
+            </button>
+        </div>
+
+        <!-- Tela Principal - Contagem de Pontos -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <button id="back-btn" class="btn-icon">←</button>
+                <h2 class="game-title">Rodada</h2>
+                <button id="reset-btn" class="btn-icon">↻</button>
+            </div>
+
+            <div class="players-grid" id="players-grid">
+                <!-- Jogadores serão inseridos aqui via JavaScript -->
+            </div>
+
+            <div class="score-input-section">
+                <div class="current-player-display" id="current-player-display">
+                    <span class="current-label">Adicionar pontos para:</span>
+                    <span class="current-name" id="current-player-name">-</span>
+                </div>
+                
+                <div class="score-buttons">
+                    <button class="score-btn" data-points="1">+1</button>
+                    <button class="score-btn" data-points="5">+5</button>
+                    <button class="score-btn" data-points="10">+10</button>
+                    <button class="score-btn" data-points="15">+15</button>
+                    <button class="score-btn" data-points="20">+20</button>
+                    <button class="score-btn" data-points="25">+25</button>
+                </div>
+
+                <div class="custom-score">
+                    <input type="number" id="custom-points" class="custom-input" placeholder="Pontos customizados" min="1" max="999">
+                    <button id="add-custom" class="btn-secondary">Adicionar</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="next-round" class="btn-success">Próxima Rodada</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
