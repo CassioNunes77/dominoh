@@ -131,6 +131,11 @@ function preventDoubleTapZoom() {
     let lastTouchEnd = 0;
     
     document.addEventListener('touchend', (event) => {
+        // Não prevenir se for um botão ou elemento clicável
+        if (event.target.closest('button') || event.target.closest('a') || event.target.closest('input')) {
+            return;
+        }
+        
         const now = Date.now();
         if (now - lastTouchEnd <= 300) {
             event.preventDefault();
@@ -138,9 +143,11 @@ function preventDoubleTapZoom() {
         lastTouchEnd = now;
     }, { passive: false });
     
-    // Prevenir double-click zoom
+    // Prevenir double-click zoom (mas não em botões)
     document.addEventListener('dblclick', (event) => {
-        event.preventDefault();
+        if (!event.target.closest('button')) {
+            event.preventDefault();
+        }
     });
     
     // Prevenir gestos de pinch zoom
@@ -158,10 +165,30 @@ function preventDoubleTapZoom() {
 }
 
 function setupEventListeners() {
+    console.log('setupEventListeners chamado');
+    console.log('modeIndividualBtn:', modeIndividualBtn);
+    console.log('setupScreen:', setupScreen);
+    
+    // Usar event delegation para garantir que funcione mesmo clicando nos elementos filhos
+    if (modeScreen) {
+        modeScreen.addEventListener('click', function(e) {
+            const clickedBtn = e.target.closest('#mode-individual');
+            if (clickedBtn && !clickedBtn.disabled) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Botão Individual clicado!');
+                console.log('Chamando switchScreen("setup")');
+                switchScreen('setup');
+                console.log('switchScreen chamado');
+            }
+        });
+    }
+    
     if (modeIndividualBtn) {
-        modeIndividualBtn.addEventListener('click', (e) => {
+        modeIndividualBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            console.log('Botão Individual clicado');
+            e.stopPropagation();
+            console.log('Botão Individual clicado (event listener direto)!');
             switchScreen('setup');
         });
     } else {
@@ -255,9 +282,15 @@ async function startGame() {
 
 function switchScreen(screen) {
     console.log('switchScreen chamado com:', screen);
+    console.log('modeScreen:', modeScreen);
+    console.log('setupScreen:', setupScreen);
+    console.log('gameScreen:', gameScreen);
     
     if (!modeScreen || !setupScreen || !gameScreen) {
         console.error('Elementos de tela não encontrados em switchScreen');
+        console.error('modeScreen:', modeScreen);
+        console.error('setupScreen:', setupScreen);
+        console.error('gameScreen:', gameScreen);
         return;
     }
     
@@ -269,13 +302,14 @@ function switchScreen(screen) {
     // Adicionar active na tela selecionada
     if (screen === 'mode') {
         modeScreen.classList.add('active');
-        console.log('Tela mode ativada');
+        console.log('Tela mode ativada, classes:', modeScreen.className);
     } else if (screen === 'setup') {
         setupScreen.classList.add('active');
-        console.log('Tela setup ativada');
+        console.log('Tela setup ativada, classes:', setupScreen.className);
+        console.log('Display style:', window.getComputedStyle(setupScreen).display);
     } else if (screen === 'game') {
         gameScreen.classList.add('active');
-        console.log('Tela game ativada');
+        console.log('Tela game ativada, classes:', gameScreen.className);
     }
 }
 
