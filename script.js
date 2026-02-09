@@ -4,22 +4,22 @@ let currentPlayerIndex = 0;
 let scores = {};
 let round = 1;
 
-// Elementos DOM
-const modeScreen = document.getElementById('mode-screen');
-const setupScreen = document.getElementById('setup-screen');
-const gameScreen = document.getElementById('game-screen');
-const modeIndividualBtn = document.getElementById('mode-individual');
-const modeDuplasBtn = document.getElementById('mode-duplas');
-const backToModeBtn = document.getElementById('back-to-mode');
-const startGameBtn = document.getElementById('start-game');
-const backBtn = document.getElementById('back-btn');
-const resetBtn = document.getElementById('reset-btn');
-const playersGrid = document.getElementById('players-grid');
-const currentPlayerName = document.getElementById('current-player-name');
-const scoreButtons = document.querySelectorAll('.score-btn');
-const customPointsInput = document.getElementById('custom-points');
-const addCustomBtn = document.getElementById('add-custom');
-const nextRoundBtn = document.getElementById('next-round');
+// Elementos DOM (serão inicializados após DOM carregar)
+let modeScreen;
+let setupScreen;
+let gameScreen;
+let modeIndividualBtn;
+let modeDuplasBtn;
+let backToModeBtn;
+let startGameBtn;
+let backBtn;
+let resetBtn;
+let playersGrid;
+let currentPlayerName;
+let scoreButtons;
+let customPointsInput;
+let addCustomBtn;
+let nextRoundBtn;
 
 // Cores para os jogadores - paleta roxo escuro
 const playerColors = ['green', 'blue', 'teal', 'green'];
@@ -98,6 +98,29 @@ async function customConfirm(message) {
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar elementos DOM
+    modeScreen = document.getElementById('mode-screen');
+    setupScreen = document.getElementById('setup-screen');
+    gameScreen = document.getElementById('game-screen');
+    modeIndividualBtn = document.getElementById('mode-individual');
+    modeDuplasBtn = document.getElementById('mode-duplas');
+    backToModeBtn = document.getElementById('back-to-mode');
+    startGameBtn = document.getElementById('start-game');
+    backBtn = document.getElementById('back-btn');
+    resetBtn = document.getElementById('reset-btn');
+    playersGrid = document.getElementById('players-grid');
+    currentPlayerName = document.getElementById('current-player-name');
+    scoreButtons = document.querySelectorAll('.score-btn');
+    customPointsInput = document.getElementById('custom-points');
+    addCustomBtn = document.getElementById('add-custom');
+    nextRoundBtn = document.getElementById('next-round');
+    
+    // Garantir que os elementos existem
+    if (!modeScreen || !setupScreen || !gameScreen) {
+        console.error('Elementos de tela não encontrados');
+        return;
+    }
+    
     setupEventListeners();
     loadFromStorage();
     preventDoubleTapZoom();
@@ -136,9 +159,13 @@ function preventDoubleTapZoom() {
 
 function setupEventListeners() {
     if (modeIndividualBtn) {
-        modeIndividualBtn.addEventListener('click', () => {
+        modeIndividualBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Botão Individual clicado');
             switchScreen('setup');
         });
+    } else {
+        console.error('Botão mode-individual não encontrado');
     }
     
     if (modeDuplasBtn) {
@@ -227,6 +254,13 @@ async function startGame() {
 }
 
 function switchScreen(screen) {
+    console.log('switchScreen chamado com:', screen);
+    
+    if (!modeScreen || !setupScreen || !gameScreen) {
+        console.error('Elementos de tela não encontrados em switchScreen');
+        return;
+    }
+    
     // Remover active de todas as telas
     modeScreen.classList.remove('active');
     setupScreen.classList.remove('active');
@@ -235,10 +269,13 @@ function switchScreen(screen) {
     // Adicionar active na tela selecionada
     if (screen === 'mode') {
         modeScreen.classList.add('active');
+        console.log('Tela mode ativada');
     } else if (screen === 'setup') {
         setupScreen.classList.add('active');
+        console.log('Tela setup ativada');
     } else if (screen === 'game') {
         gameScreen.classList.add('active');
+        console.log('Tela game ativada');
     }
 }
 
