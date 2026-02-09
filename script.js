@@ -272,9 +272,18 @@ function addPoints(points) {
     // Salvar estado
     saveToStorage();
     
-    // Avançar para próximo jogador automaticamente
+    // Verificar se é o último jogador
+    const isLastPlayer = currentPlayerIndex === players.length - 1;
+    
+    // Avançar para próximo jogador ou próxima rodada
     setTimeout(() => {
-        nextPlayer();
+        if (isLastPlayer) {
+            // Se for o último jogador, avançar para próxima rodada
+            nextRound();
+        } else {
+            // Caso contrário, avançar para próximo jogador
+            nextPlayer();
+        }
     }, 300);
 }
 
@@ -285,7 +294,11 @@ function nextPlayer() {
 
 function nextRound() {
     round++;
+    currentPlayerIndex = 0; // Resetar para o primeiro jogador
     document.querySelector('.game-title').textContent = `🎲 Rodada ${round}`;
+    
+    // Atualizar display do jogador atual
+    setCurrentPlayer(0);
     
     // Animação de transição
     playersGrid.style.animation = 'none';
@@ -295,6 +308,9 @@ function nextRound() {
     
     // Verificar vencedor
     checkWinner();
+    
+    // Salvar estado
+    saveToStorage();
 }
 
 function checkWinner() {
