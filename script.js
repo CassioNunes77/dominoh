@@ -8,6 +8,7 @@ let round = 1;
 let modeScreen;
 let setupScreen;
 let gameScreen;
+let statsScreen;
 let modeIndividualBtn;
 let modeDuplasBtn;
 let backToModeBtn;
@@ -20,6 +21,7 @@ let scoreButtons;
 let customPointsInput;
 let addCustomBtn;
 let nextRoundBtn;
+let finishGameBtn;
 
 // Cores para os jogadores - paleta roxo escuro
 const playerColors = ['green', 'blue', 'teal', 'green'];
@@ -102,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modeScreen = document.getElementById('mode-screen');
     setupScreen = document.getElementById('setup-screen');
     gameScreen = document.getElementById('game-screen');
+    statsScreen = document.getElementById('stats-screen');
     modeIndividualBtn = document.getElementById('mode-individual');
     modeDuplasBtn = document.getElementById('mode-duplas');
     backToModeBtn = document.getElementById('back-to-mode');
@@ -114,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     customPointsInput = document.getElementById('custom-points');
     addCustomBtn = document.getElementById('add-custom');
     nextRoundBtn = document.getElementById('next-round');
+    finishGameBtn = document.getElementById('finish-game');
     
     // Garantir que os elementos existem
     if (!modeScreen || !setupScreen || !gameScreen) {
@@ -183,27 +187,71 @@ function setupEventListeners() {
     resetBtn.addEventListener('click', resetGame);
     
     scoreButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            // Ignorar botão do dado (não deve adicionar pontos)
+            if (btn.classList.contains('score-btn-dice')) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
             const points = parseInt(btn.dataset.points);
-            addPoints(points);
+            if (points) {
+                addPoints(points);
+            }
         });
     });
     
     addCustomBtn.addEventListener('click', () => {
-        const points = parseInt(customPointsInput.value);
-        if (points > 0) {
-            addPoints(points);
+        const pointsValue = customPointsInput.value.trim();
+        const points = parseInt(pointsValue, 10);
+        if (!isNaN(points) && points >= 0) {
+            setCustomPoints(points);
             customPointsInput.value = '';
         }
     });
     
     customPointsInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            addCustomBtn.click();
+            const pointsValue = customPointsInput.value.trim();
+            const points = parseInt(pointsValue, 10);
+            if (!isNaN(points) && points >= 0) {
+                setCustomPoints(points);
+                customPointsInput.value = '';
+            }
         }
     });
     
     nextRoundBtn.addEventListener('click', nextRound);
+    
+    if (finishGameBtn) {
+        finishGameBtn.addEventListener('click', async () => {
+            const confirmed = await customConfirm('Deseja encerrar a partida?');
+            if (confirmed) {
+                showStats();
+            }
+        });
+    }
+    
+    // Botões da tela de estatísticas
+    const shareStatsBtn = document.getElementById('share-stats');
+    const newGameBtn = document.getElementById('new-game');
+    
+    if (shareStatsBtn) {
+        shareStatsBtn.addEventListener('click', shareStats);
+    }
+    
+    if (newGameBtn) {
+        newGameBtn.addEventListener('click', () => {
+            document.getElementById('stats-screen').classList.remove('active');
+            document.getElementById('mode-screen').classList.add('active');
+            // Limpar dados do jogo
+            players = [];
+            scores = {};
+            round = 1;
+            currentPlayerIndex = 0;
+            localStorage.removeItem('dominoGame');
+        });
+    }
     
     // Permitir adicionar pontos clicando no card do jogador
     playersGrid.addEventListener('click', (e) => {
@@ -292,6 +340,9 @@ function switchScreen(screen) {
     modeScreen.classList.remove('active');
     setupScreen.classList.remove('active');
     gameScreen.classList.remove('active');
+    if (statsScreen) {
+        statsScreen.classList.remove('active');
+    }
     
     // Adicionar active na tela selecionada
     if (screen === 'mode') {
@@ -300,6 +351,122 @@ function switchScreen(screen) {
         setupScreen.classList.add('active');
     } else if (screen === 'game') {
         gameScreen.classList.add('active');
+    } else if (screen === 'stats') {
+        if (statsScreen) {
+            statsScreen.classList.add('active');
+        }
+    }
+}
+
+function showStats() {
+    // Trocar para tela de estatísticas
+    gameScreen.classList.remove('active');
+    if (!statsScreen) {
+        statsScreen = document.getElementById('stats-screen');
+    }
+    if (statsScreen) {
+        statsScreen.classList.add('active');
+    }
+    
+    // Atualizar estatísticas
+    const statsRounds = document.getElementById('stats-rounds');
+    if (statsRounds) {
+        statsRounds.textContent = round;
+    }
+    
+    // Ordenar jogadores por pontuação
+    const sortedPlayers = players.map(player => ({
+        name: player,
+        score: scores[player] || 0
+    })).sort((a, b) => b.score - a.score);
+    
+    // Renderizar lista de jogadores
+    const statsPlayersList = document.getElementById('stats-players-list');
+    if (statsPlayersList) {
+        statsPlayersList.innerHTML = '';
+        
+        // Determinar posições e medalhas considerando empates
+        let currentRank = 1;
+        let previousScore = null;
+        
+        sortedPlayers.forEach((player, index) => {
+            // Se a pontuação mudou, atualizar o rank
+            if (previousScore !== null && player.score !== previousScore) {
+                currentRank = index + 1;
+            }
+            previousScore = player.score;
+            
+            // Determinar medalha baseado na posição e empates
+            let medal = '';
+            if (currentRank === 1) {
+                medal = '🥇';
+            } else if (currentRank === 2 && sortedPlayers[0].score !== player.score) {
+                medal = '🥈';
+            } else if (currentRank === 3 && sortedPlayers[0].score !== player.score && sortedPlayers[1].score !== player.score) {
+                medal = '🥉';
+            }
+            
+            const playerCard = document.createElement('div');
+            playerCard.className = 'stats-player-card';
+            
+            // Adicionar classe winner se for primeiro lugar (mesmo com empate)
+            if (player.score === sortedPlayers[0].score) {
+                playerCard.classList.add('winner');
+            }
+            
+            playerCard.innerHTML = `
+                <div class="stats-player-rank">${currentRank}º</div>
+                <div class="stats-player-info">
+                    <div class="stats-player-name">${medal} ${player.name}</div>
+                    <div class="stats-player-score">${player.score} pontos</div>
+                </div>
+            `;
+            
+            statsPlayersList.appendChild(playerCard);
+        });
+    }
+}
+
+function shareStats() {
+    // Criar texto para compartilhar
+    const sortedPlayers = players.map(player => ({
+        name: player,
+        score: scores[player] || 0
+    })).sort((a, b) => b.score - a.score);
+    
+    let shareText = `🎲 Partida de Dominó Finalizada!\n\n`;
+    shareText += `Rodadas: ${round}\n\n`;
+    shareText += `Classificação:\n`;
+    
+    sortedPlayers.forEach((player, index) => {
+        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
+        shareText += `${index + 1}º ${medal} ${player.name} - ${player.score} pontos\n`;
+    });
+    
+    // Tentar usar Web Share API se disponível
+    if (navigator.share) {
+        navigator.share({
+            title: 'Resultados da Partida de Dominó',
+            text: shareText
+        }).catch(err => {
+            console.log('Erro ao compartilhar:', err);
+            copyToClipboard(shareText);
+        });
+    } else {
+        // Fallback: copiar para clipboard
+        copyToClipboard(shareText);
+    }
+}
+
+function copyToClipboard(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+            customAlert('Resultados copiados para a área de transferência!');
+        }).catch(() => {
+            customAlert('Resultados:\n\n' + text);
+        });
+    } else {
+        customAlert('Resultados:\n\n' + text);
     }
 }
 
@@ -382,11 +549,24 @@ function setCurrentPlayer(index) {
     }
 }
 
-function addPoints(points) {
+// Tornar função globalmente acessível
+window.addPoints = function(points) {
     if (players.length === 0) return;
     
+    // Garantir que points é um número
+    points = parseInt(points, 10);
+    if (isNaN(points) || points <= 0) return;
+    
     const currentPlayer = players[currentPlayerIndex];
-    scores[currentPlayer] += points;
+    
+    // Garantir que o score existe e inicializar se necessário
+    if (typeof scores[currentPlayer] === 'undefined' || scores[currentPlayer] === null) {
+        scores[currentPlayer] = 0;
+    }
+    
+    // Converter para número e somar pontos
+    const currentScore = parseInt(scores[currentPlayer], 10) || 0;
+    scores[currentPlayer] = currentScore + points;
     
     // Atualizar display
     const scoreElement = document.getElementById(`score-${currentPlayer}`);
@@ -407,11 +587,43 @@ function addPoints(points) {
     
     // Salvar estado
     saveToStorage();
+};
+
+// Função para definir pontos customizados (substitui o valor)
+function setCustomPoints(points) {
+    if (players.length === 0) return;
     
-    // Avançar para próximo jogador automaticamente
-    setTimeout(() => {
-        nextPlayer();
-    }, 300);
+    // Garantir que points é um número
+    points = parseInt(points, 10);
+    if (isNaN(points) || points < 0) return;
+    
+    const currentPlayer = players[currentPlayerIndex];
+    
+    // Substituir o valor ao invés de somar
+    scores[currentPlayer] = points;
+    
+    // Atualizar display
+    const scoreElement = document.getElementById(`score-${currentPlayer}`);
+    if (scoreElement) {
+        scoreElement.textContent = scores[currentPlayer];
+        scoreElement.classList.add('score-increase');
+        
+        setTimeout(() => {
+            scoreElement.classList.remove('score-increase');
+        }, 500);
+    }
+    
+    // Animação de feedback
+    const card = document.querySelector(`.player-card[data-player="${currentPlayer}"]`);
+    if (card && card.classList.contains('active')) {
+        card.style.transform = 'scale(1.05)';
+        setTimeout(() => {
+            card.style.transform = '';
+        }, 200);
+    }
+    
+    // Salvar estado
+    saveToStorage();
 }
 
 function nextPlayer() {

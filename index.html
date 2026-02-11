@@ -101,11 +101,21 @@
                 
                 <div class="score-buttons">
                     <button class="score-btn" data-points="1">+1</button>
-                    <button class="score-btn" data-points="5">+5</button>
-                    <button class="score-btn" data-points="10">+10</button>
-                    <button class="score-btn" data-points="15">+15</button>
-                    <button class="score-btn" data-points="20">+20</button>
-                    <button class="score-btn" data-points="25">+25</button>
+                    <button class="score-btn" data-points="2">+2</button>
+                    <button class="score-btn" data-points="3">+3</button>
+                    <button class="score-btn" data-points="4">+4</button>
+                    <button class="score-btn score-btn-dice" data-points="5" onclick="event.preventDefault(); event.stopPropagation(); return false;">
+                        <svg class="dice-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="10" y="10" width="80" height="80" fill="#FFFFFF" rx="12" stroke="#9D4EDD" stroke-width="3"/>
+                            <!-- Face 5: 4 cantos + centro -->
+                            <circle cx="25" cy="25" r="5" fill="#6B2C91"/>
+                            <circle cx="75" cy="25" r="5" fill="#6B2C91"/>
+                            <circle cx="50" cy="50" r="5" fill="#6B2C91"/>
+                            <circle cx="25" cy="75" r="5" fill="#6B2C91"/>
+                            <circle cx="75" cy="75" r="5" fill="#6B2C91"/>
+                        </svg>
+                    </button>
+                    <button class="score-btn" data-points="6">+6</button>
                 </div>
 
                 <div class="custom-score">
@@ -115,6 +125,33 @@
 
                 <div class="action-buttons">
                     <button id="next-round" class="btn-success">Próxima Rodada</button>
+                    <button id="finish-game" class="btn-finish">Concluir Partida</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Estatísticas -->
+        <div id="stats-screen" class="screen">
+            <div class="stats-header">
+                <h1 class="title">🎉 Partida Finalizada!</h1>
+                <p class="subtitle">Resultados da partida</p>
+            </div>
+
+            <div class="stats-content">
+                <div class="stats-summary">
+                    <div class="stat-item">
+                        <span class="stat-label">Rodadas</span>
+                        <span class="stat-value" id="stats-rounds">0</span>
+                    </div>
+                </div>
+
+                <div class="stats-players" id="stats-players-list">
+                    <!-- Jogadores serão inseridos aqui via JavaScript -->
+                </div>
+
+                <div class="stats-actions">
+                    <button id="share-stats" class="btn-primary">Compartilhar</button>
+                    <button id="new-game" class="btn-secondary">Nova Partida</button>
                 </div>
             </div>
         </div>
