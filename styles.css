@@ -282,10 +282,16 @@ body::before {
 
 .setup-actions .btn-primary {
     flex: 1;
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
 }
 
 .setup-actions .btn-secondary {
     flex: 0 0 auto;
+    font-size: 22px;
+    font-weight: 600;
 }
 
 .player-input-container {
