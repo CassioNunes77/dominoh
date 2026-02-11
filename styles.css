@@ -402,8 +402,8 @@ body::before {
 .btn-success {
     width: 100%;
     padding: 18px;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 600;
     color: var(--text-light);
     background: var(--gradient-primary);
     border: 3px solid rgba(157, 78, 221, 0.3);
@@ -411,6 +411,8 @@ body::before {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: var(--shadow-lg);
+    text-transform: none;
+    letter-spacing: 0;
 }
 
 .btn-success:active {
@@ -737,6 +739,13 @@ body::before {
     margin-bottom: 12px;
 }
 
+.custom-score .btn-secondary {
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
 .custom-input {
     flex: 1;
     padding: 20px;
@@ -770,8 +779,8 @@ body::before {
 .btn-finish {
     width: 100%;
     padding: 18px;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 600;
     color: var(--text-light);
     background: linear-gradient(135deg, #9D4EDD 0%, #6B2C91 100%);
     border: 3px solid rgba(157, 78, 221, 0.3);
@@ -779,6 +788,8 @@ body::before {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: var(--shadow-lg);
+    text-transform: none;
+    letter-spacing: 0;
 }
 
 .btn-finish:active {
