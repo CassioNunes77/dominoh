@@ -443,11 +443,14 @@ function shareStats() {
         shareText += `${index + 1}º ${medal} ${player.name} - ${player.score} pontos\n`;
     });
     
+    shareText += `\n🎮 Jogue também: http://dominoh.netlify.app`;
+    
     // Tentar usar Web Share API se disponível
     if (navigator.share) {
         navigator.share({
             title: 'Resultados da Partida de Dominó',
-            text: shareText
+            text: shareText,
+            url: 'http://dominoh.netlify.app'
         }).catch(err => {
             console.log('Erro ao compartilhar:', err);
             copyToClipboard(shareText);
