@@ -464,12 +464,12 @@ function shareStats() {
 function copyToClipboard(text) {
     if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
-            customAlert('Resultados copiados para a área de transferência!');
+            // Texto copiado silenciosamente
         }).catch(() => {
-            customAlert('Resultados:\n\n' + text);
+            // Falha ao copiar - não exibir mensagem
         });
     } else {
-        customAlert('Resultados:\n\n' + text);
+        // Clipboard não disponível - não exibir mensagem
     }
 }
 
